@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use App\Models\User;
-use App\Models\Karyawan;
-use App\Models\Panen;
-use App\Models\Harga;
-use App\Models\Cuti;
-use App\Models\InventoryMasuk;
+
+use App\Models\Barang;
+use App\Models\BarangMasuk;
+use App\Models\BarangKeluar;
+use App\Models\JenisBarang;
+use App\Models\Suplier;
 
 class DashboardController extends Controller
 {
@@ -18,21 +17,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Menampilkan halaman dashboard
-        $karyawan = Karyawan::count();
-        $panen = Panen::count();
-        $harga = Harga::count();
-        $cuti = Cuti::count();
-        
-        // Hitung pemasukan dan pengeluaran
-        $pemasukan = Panen::sum('hasil_pemilik');
-        $pengeluaran = InventoryMasuk::sum('harga');
-        
-        // Cek Login
-        if (!auth()->user()) {
-            return redirect()->route('login')->with('warning', 'Silahkan login terlebih dahulu!');
-        }
-        return view('dashboard', compact('karyawan', 'panen', 'harga', 'cuti', 'pemasukan', 'pengeluaran'));
+        $barang = Barang::all();
+        $suplier = Suplier::all();
+        $jenis_barang = JenisBarang::all();
+        $barang_masuk = BarangMasuk::all();
+        $barang_keluar = BarangKeluar::all();
+        return view('dashboard', compact('barang', 'barang_masuk', 'barang_keluar', 'jenis_barang', 'suplier'));
 
     }
 

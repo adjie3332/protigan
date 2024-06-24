@@ -3,14 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KaryawanController;
-use App\Http\Controllers\HargaKaretController;
-use App\Http\Controllers\PanenController;
-use App\Http\Controllers\GajiController;
-use App\Http\Controllers\CutiController;
-use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\LaporanKeuanganController;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\SuplierController;
+use App\Http\Controllers\JenisBarangController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\RiwayatBarangMasukController;
+use App\Http\Controllers\RiwayatBarangKeluarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,13 +31,8 @@ Route::post('/login', [AuthController::class, 'store'])->middleware('guest');
 Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
-
-// Route untuk register
-Route::get('/register', [AuthController::class, 'create'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-
 // Route untuk dashboard
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
 
 Route::get('/profile', [AuthController::class, 'profile'])->name('profile')->middleware('auth');
 Route::get('/profile/{id}/edit', [AuthController::class, 'edit'])->name('profile.edit')->middleware('auth');
@@ -51,68 +46,53 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password');
 Route::post('/reset-password-process', [ForgotPasswordController::class, 'updatePassword'])->name('reset-password-process');
 
+// Route untuk suplier
+Route::get('/suplier', [SuplierController::class, 'index'])->name('suplier.index')->middleware('auth');
+Route::get('/suplier/create', [SuplierController::class, 'create'])->name('suplier.create')->middleware('auth');
+Route::post('/suplier', [SuplierController::class, 'store'])->name('suplier.store')->middleware('auth');
+Route::get('/suplier/{id}/edit', [SuplierController::class, 'edit'])->name('suplier.edit')->middleware('auth');
+Route::put('/suplier/{id}', [SuplierController::class, 'update'])->name('suplier.update')->middleware('auth');
+Route::delete('/suplier/{id}', [SuplierController::class, 'destroy'])->name('suplier.destroy')->middleware('auth');
 
-// Route untuk karyawan
-Route::get('/karyawan', [KaryawanController::class, 'index'])->name('karyawan.index')->middleware('auth');
-Route::get('/karyawan/create', [KaryawanController::class, 'create'])->name('karyawan.create')->middleware('auth');
-Route::post('/karyawan', [KaryawanController::class, 'store'])->name('karyawan.store')->middleware('auth');
-Route::get('/karyawan/{id}/edit', [KaryawanController::class, 'edit'])->name('karyawan.edit')->middleware('auth');
-Route::put('/karyawan/{id}', [KaryawanController::class, 'update'])->name('karyawan.update')->middleware('auth');
-Route::delete('/karyawan/{id}', [KaryawanController::class, 'destroy'])->name('karyawan.destroy')->middleware('auth');
+// Route untuk jenis barang
+Route::get('/jenis-barang', [JenisBarangController::class, 'index'])->name('jenis-barang.index')->middleware('auth');
+Route::get('/jenis-barang/create', [JenisBarangController::class, 'create'])->name('jenis-barang.create')->middleware('auth');
+Route::post('/jenis-barang', [JenisBarangController::class, 'store'])->name('jenis-barang.store')->middleware('auth');
+Route::get('/jenis-barang/{id}/edit', [JenisBarangController::class, 'edit'])->name('jenis-barang.edit')->middleware('auth');
+Route::put('/jenis-barang/{id}', [JenisBarangController::class, 'update'])->name('jenis-barang.update')->middleware('auth');
+Route::delete('/jenis-barang/{id}', [JenisBarangController::class, 'destroy'])->name('jenis-barang.destroy')->middleware('auth');
 
-// Route untuk harga karet
-Route::get('/harga', [HargaKaretController::class, 'index'])->name('harga.index')->middleware('auth');
-Route::post('/harga', [HargaKaretController::class, 'store'])->name('harga.store')->middleware('auth');
-Route::get('/harga/{id}/edit', [HargaKaretController::class, 'edit'])->name('harga.edit')->middleware('auth');
-Route::put('/harga/{id}', [HargaKaretController::class, 'update'])->name('harga.update')->middleware('auth');
-Route::delete('/harga/{id}', [HargaKaretController::class, 'destroy'])->name('harga.destroy')->middleware('auth');
+// Route untuk barang
+Route::get('barang', [BarangController::class, 'index'])->name('barang.index')->middleware('auth');
+Route::get('barang/create', [BarangController::class, 'create'])->name('barang.create')->middleware('auth');
+Route::post('barang', [BarangController::class, 'store'])->name('barang.store')->middleware('auth');
+Route::get('barang/{id}/edit', [BarangController::class, 'edit'])->name('barang.edit')->middleware('auth');
+Route::put('barang/{id}', [BarangController::class, 'update'])->name('barang.update')->middleware('auth');
+Route::delete('barang/{id}', [BarangController::class, 'destroy'])->name('barang.destroy')->middleware('auth');
 
-// Route untuk panen
-Route::get('/panen', [PanenController::class, 'index'])->name('panen.index')->middleware('auth');
-Route::get('/panen/create', [PanenController::class, 'create'])->name('panen.create')->middleware('auth');
-Route::post('/panen', [PanenController::class, 'store'])->name('panen.store')->middleware('auth');
-Route::get('/panen/{id}/edit', [PanenController::class, 'edit'])->name('panen.edit')->middleware('auth');
-Route::put('/panen/{id}', [PanenController::class, 'update'])->name('panen.update')->middleware('auth');
-Route::delete('/panen/{id}', [PanenController::class, 'destroy'])->name('panen.destroy')->middleware('auth');
+// Route untuk barang masuk
+Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barang-masuk.index')->middleware('auth');
+Route::get('/barang-masuk/create', [BarangMasukController::class, 'create'])->name('barang-masuk.create')->middleware('auth');
+Route::post('/barang-masuk', [BarangMasukController::class, 'store'])->name('barang-masuk.store')->middleware('auth');
+Route::get('/barang-masuk/{id}/edit', [BarangMasukController::class, 'edit'])->name('barang-masuk.edit')->middleware('auth');
+Route::put('/barang-masuk/{id}', [BarangMasukController::class, 'update'])->name('barang-masuk.update')->middleware('auth');
+Route::delete('/barang-masuk/{id}', [BarangMasukController::class, 'destroy'])->name('barang-masuk.destroy')->middleware('auth');
 
-// Route untuk gaji
-Route::get('/gaji', [GajiController::class, 'index'])->name('gaji.index')->middleware('auth');
-Route::get('/gaji/{id}', [GajiController::class, 'show'])->name('gaji.show')->middleware('auth');   
-Route::get('/gaji/create', [GajiController::class, 'create'])->name('gaji.create')->middleware('auth');
-Route::post('/gaji', [GajiController::class, 'store'])->name('gaji.store')->middleware('auth');
-Route::get('/gaji/{id}/edit', [GajiController::class, 'edit'])->name('gaji.edit')->middleware('auth');
-Route::put('/gaji/{id}', [GajiController::class, 'update'])->name('gaji.update')->middleware('auth');
-Route::delete('/gaji/{id}', [GajiController::class, 'destroy'])->name('gaji.destroy')->middleware('auth');
-Route::get('/gaji/slip/{id}', [GajiController::class, 'slip'])->name('gaji.slip')->middleware('auth');
+// Route untuk barang keluar
+Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barang-keluar.index')->middleware('auth');
+Route::get('/barang-keluar/create', [BarangKeluarController::class, 'create'])->name('barang-keluar.create')->middleware('auth');
+Route::post('/barang-keluar', [BarangKeluarController::class, 'store'])->name('barang-keluar.store')->middleware('auth');
+Route::get('/barang-keluar/{id}/edit', [BarangKeluarController::class, 'edit'])->name('barang-keluar.edit')->middleware('auth');
+Route::put('/barang-keluar/{id}', [BarangKeluarController::class, 'update'])->name('barang-keluar.update')->middleware('auth');
+Route::delete('/barang-keluar/{id}', [BarangKeluarController::class, 'destroy'])->name('barang-keluar.destroy')->middleware('auth');
 
-// Route untuk cuti
-Route::get('/cuti', [CutiController::class, 'index'])->name('cuti.index')->middleware('auth');
-Route::get('/cuti/create', [CutiController::class, 'create'])->name('cuti.create')->middleware('auth');
-Route::post('/cuti', [CutiController::class, 'store'])->name('cuti.store')->middleware('auth');
-Route::get('/cuti/{id}/edit', [CutiController::class, 'edit'])->name('cuti.edit')->middleware('auth');
-Route::put('/cuti/{id}', [CutiController::class, 'update'])->name('cuti.update')->middleware('auth');
-Route::put('/cuti/{id}/update-status', [CutiController::class, 'updateStatus'])->name('cuti.update-status')->middleware('auth');
-Route::delete('/cuti/{id}', [CutiController::class, 'destroy'])->name('cuti.destroy')->middleware('auth');
-Route::get('/cuti/cetak', [CutiController::class, 'cetakPdf'])->name('cuti.cetak')->middleware('auth');
+// Route untuk riwayat barang masuk
+Route::get('riwayat-masuk', [RiwayatBarangMasukController::class, 'index'])->name('riwayat-masuk.index')->middleware('auth');
+Route::get('riwayat-masuk/cetak-pdf', [RiwayatBarangMasukController::class, 'cetakPdf'])->name('riwayat-masuk.cetak-pdf')->middleware('auth');
+Route::get('riwayat-masuk/cetak-excel', [RiwayatBarangMasukController::class, 'cetakExcel'])->name('riwayat-masuk.cetak-excel')->middleware('auth');
 
-// Route untuk inventory
-Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index')->middleware('auth');
-Route::get('/barang-masuk', [InventoryController::class, 'InventoryMasuk'])->name('inventory.masuk')->middleware('auth');
-Route::get('/barang-keluar', [InventoryController::class, 'InventoryKeluar'])->name('inventory.keluar')->middleware('auth');
-Route::get('/inventory/create', [InventoryController::class, 'create'])->name('inventory.create')->middleware('auth');
-Route::post('/inventory', [InventoryController::class, 'store'])->name('inventory.store')->middleware('auth');
-Route::post('/barang-masuk', [InventoryController::class, 'storeMasuk'])->name('inventory.store-masuk')->middleware('auth');
-Route::post('/barang-keluar', [InventoryController::class, 'storeKeluar'])->name('inventory.store-keluar')->middleware('auth');
-Route::get('/inventory/{id}/edit', [InventoryController::class, 'edit'])->name('inventory.edit')->middleware('auth');
-Route::get('/inventory-masuk/{id}/edit', [InventoryController::class, 'editMasuk'])->name('inventory.edit-masuk')->middleware('auth');
-Route::get('/inventory-keluar/{id}/edit', [InventoryController::class, 'editKeluar'])->name('inventory.edit-keluar')->middleware('auth');
-Route::put('/inventory-masuk/{id}', [InventoryController::class, 'updateMasuk'])->name('inventory.update-masuk')->middleware('auth');
-Route::put('/inventory-keluar/{id}', [InventoryController::class, 'updateKeluar'])->name('inventory.update-keluar')->middleware('auth');
-Route::put('/inventory/{id}', [InventoryController::class, 'update'])->name('inventory.update')->middleware('auth');
-Route::delete('/inventory-masuk/{id}', [InventoryController::class, 'destroyMasuk'])->name('inventory-masuk.destroy')->middleware('auth');
-Route::delete('/inventory-keluar/{id}', [InventoryController::class, 'destroyKeluar'])->name('inventory-keluar.destroy')->middleware('auth');
-Route::delete('/inventory/{id}', [InventoryController::class, 'destroy'])->name('inventory.destroy')->middleware('auth');
+// Route untuk riwayat barang keluar
+Route::get('riwayat-keluar', [RiwayatBarangKeluarController::class, 'index'])->name('riwayat-keluar.index')->middleware('auth');
+Route::get('riwayat-keluar/cetak-pdf', [RiwayatBarangKeluarController::class, 'cetakPdf'])->name('riwayat-keluar.cetak-pdf')->middleware('auth');
+Route::get('riwayat-keluar/cetak-excel', [RiwayatBarangKeluarController::class, 'cetakExcel'])->name('riwayat-keluar.cetak-excel')->middleware('auth');
 
-// Route untuk laporan Keuangan
-Route::get('/laporan-keuangan', [LaporanKeuanganController::class, 'index'])->name('laporan-keuangan')->middleware('auth');
-Route::get('/laporan-keuangan/cetak', [LaporanKeuanganController::class, 'cetak'])->name('laporan-keuangan.cetak')->middleware('auth');

@@ -28,25 +28,18 @@
                 aria-haspopup="true" aria-expanded="false">
                 <div class="user-name text-end mr-3">
                                 <h6 class="mb-0 text-gray-600">
-                                @auth
-                                    {{ Auth::user()->username }}
-                                @endauth
                                 </h6>
                                 <p class="mb-0 text-sm text-gray-600 small">{{ Auth::user()->role }}</p>
                             </div>
-                @if (Auth::user()->karyawan->foto === null)
-                    <img class="img-profile rounded-circle" src="{{ asset('assets/img/undraw_profile.svg') }}">
-                @else
-                    <img class="img-profile rounded-circle" src="{{ asset('images/'.Auth::user()->karyawan->foto) }}">
-                @endif
+                <img class="img-profile rounded-circle" src="{{ asset('assets/img/undraw_profile.svg') }}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="{{ route('profile') }}">
+                {{-- <a class="dropdown-item" href="{{ route('profile') }}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
-                </a>
+                </a> --}}
                 {{-- <a class="dropdown-item" href="#">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings

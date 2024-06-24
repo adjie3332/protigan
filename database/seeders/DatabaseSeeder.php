@@ -14,8 +14,5 @@ class DatabaseSeeder extends Seeder
     {
         // Menjalankan seeder UserSeeder
         $this->call(UserSeeder::class);
-
-        // Menjalankan seeder KaryawanSeeder
-        $this->call(KaryawanSeeder::class);
     }
 }

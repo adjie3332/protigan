@@ -46,9 +46,4 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Mendefinisikan relasi one-to-one dengan model Karyawan
-    public function karyawan()
-    {
-        return $this->hasOne(Karyawan::class, 'users_id', 'id');
-    }
 }
