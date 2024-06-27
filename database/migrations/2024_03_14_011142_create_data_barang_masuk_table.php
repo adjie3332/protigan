@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('data_barang_id');
             $table->unsignedBigInteger('data_suplier_id');
             $table->integer('jumlah_masuk');
-            $table->decimal('harga', 10, 2);
             $table->date('tanggal_masuk');
             $table->timestamps();
 

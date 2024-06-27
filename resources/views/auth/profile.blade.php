@@ -31,7 +31,7 @@
         </div>
         <!-- Profile -->
         <div class="row gutters-sm">
-            <div class="col-md-4 mb-3">
+            {{-- <div class="col-md-4 mb-3">
               <div class="card">
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
@@ -48,8 +48,8 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-8">
+            </div> --}}
+            <div class="col-md-12">
               <div class="card mb-3">
                 <div class="card-body">
                   <div class="row">
@@ -57,7 +57,16 @@
                       <h6 class="mb-0">Nama</h6>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ Auth::user()->karyawan->nama }}
+                        {{ Auth::user()->name }}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Username</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{ Auth::user()->username }}
                     </div>
                   </div>
                   <hr>
@@ -70,33 +79,6 @@
                     </div>
                   </div>
                   <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">No. Telp</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                        {{ Auth::user()->karyawan->no_telepon }}
-                    </div>
-                  </div>
-                  <hr>
-                  <div class="row">
-                    <div class="col-sm-3">
-                      <h6 class="mb-0">Alamat</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                        {{ Auth::user()->karyawan->alamat }}
-                    </div>
-                  </div>
-                  <hr>
-                <div class="row">
-                    <div class="col-sm-3">
-                    <h6 class="mb-0">Umur</h6>
-                    </div>
-                    <div class="col-sm-9 text-secondary">
-                        {{ Auth::user()->karyawan->umur }}
-                    </div>
-                </div>
-                <hr>
                   <div class="row">
                     <div class="col-sm-12">
                       <a href="{{ route('profile.edit', Auth::user()->id) }}" class="btn btn-info btn-sm">Edit Profile</a>

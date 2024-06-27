@@ -22,28 +22,30 @@ class ForgotPasswordController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
-        // memvalidasi data yang dikirim
-        $validatedData = $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
+        try {
+            // Validasi data yang dikirim
+            $validatedData = $request->validate([
+                'email' => 'required|email|exists:users,email',
+            ]);
 
-        $token = Str::random(60);
+            // Membuat token reset password
+            $token = Str::random(60);
 
-        // membuat token reset password
-        ResetPasswordToken::UpdateOrCreate(
-            [
-                'email' => $validatedData['email']
-            ],
-            [   
-                'email' => $validatedData['email'],
-                'token' => $token,
-        ]);
+            // Simpan token reset password ke database
+            ResetPasswordToken::updateOrCreate(
+                ['email' => $validatedData['email']],
+                ['token' => $token, 'created_at' => now()]
+            );
 
-        Mail::to($validatedData['email'])->send(new ResetPasswordMail($token));
+            // Kirim email reset password
+            Mail::to($validatedData['email'])->send(new ResetPasswordMail($token));
 
-        // kirim email reset password
-        return back()->with('info', 'Email reset password berhasil dikirim!');
-    }
+            return back()->with('info', 'Email reset password berhasil dikirim!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Tampilkan pesan jika email tidak terdaftar
+            return back()->with('warning', 'Email tidak terdaftar!');
+        }
+    }  
 
     public function resetPassword(Request $request, $token)
     {

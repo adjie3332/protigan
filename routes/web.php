@@ -11,6 +11,7 @@ use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\RiwayatBarangMasukController;
 use App\Http\Controllers\RiwayatBarangKeluarController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,14 @@ Route::get('/forgot-password', [ForgotPasswordController::class, 'forgotPassword
 Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('send-reset-link-email');
 Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'resetPassword'])->name('reset-password');
 Route::post('/reset-password-process', [ForgotPasswordController::class, 'updatePassword'])->name('reset-password-process');
+
+// Route untuk User
+Route::get('/user', [UserController::class, 'index'])->name('user.index')->middleware('auth');
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create')->middleware('auth');
+Route::post('/user', [UserController::class, 'store'])->name('user.store')->middleware('auth');
+Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->middleware('auth');
+Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update')->middleware('auth');
+Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy')->middleware('auth');
 
 // Route untuk suplier
 Route::get('/suplier', [SuplierController::class, 'index'])->name('suplier.index')->middleware('auth');

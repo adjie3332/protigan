@@ -85,9 +85,8 @@ class AuthController extends Controller
     {
         // Menampilkan halaman edit profil
         $user = User::findOrFail($id);
-        $karyawan = Karyawan::where('users_id', $id)->first();
 
-        return view('auth.edit-profile', compact('user', 'karyawan'));
+        return view('auth.edit-profile', compact('user'));
     }
 
     /**
@@ -98,57 +97,17 @@ class AuthController extends Controller
         // Validasi data
         $request->validate([
             'nama' => 'required',
-            'alamat' => 'required',
-            'tanggal_lahir' => 'required|date|before_or_equal:today', // Menambahkan aturan untuk memeriksa apakah tanggal lahir tidak boleh setelah tanggal saat ini
-            'jenis_kelamin' => 'required',
-            'no_telp' => 'required',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'email' => 'required|email|unique:users,email,' . $id,
             'username' => 'required',
         ]);
 
         $user = User::findOrFail($id);
 
-        // Setting umur
-        $tanggal_lahir = new \DateTime($request->tanggal_lahir);
-        $sekarang = new \DateTime();
-        $umur = $sekarang->diff($tanggal_lahir);
-        $umur = $umur->y;
-
-        // Image upload
-        if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            $image_path = public_path("images/{$user->karyawan->foto}");
-            if (file_exists($image_path)) {
-                unlink($image_path);
-            }
-
-            // Unggah foto baru
-            $imageName = time() . '.' . $request->foto->extension();
-            $request->foto->move(public_path('images'), $imageName);
-        } else {
-            // Jika tidak ada foto baru, gunakan foto lama
-            $imageName = $user->karyawan->foto;
-        }
-
         // Update data user
         $user->update([
             'email' => $request->email,
             'username' => $request->username,
         ]);
-
-        // Update data karyawan
-        $karyawan = Karyawan::where('users_id', $id)->first();
-        $karyawan->update([
-            'nama' => $request->nama,
-            'alamat' => $request->alamat,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'umur' => $umur,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'no_telepon' => $request->no_telp,
-            'foto' => $imageName,
-        ]);
-
         // Redirect ke halaman profile
         return redirect()->route('profile')->with('success', 'Data berhasil diubah');
     }

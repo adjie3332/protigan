@@ -59,8 +59,7 @@
     </li>
     @endif
     
-    <!-- Inventori -->
-    @if(auth()->user()->role == 'admin')    
+    <!-- Inventori -->    
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventori"
             aria-expanded="true" aria-controls="collapseInventori">
@@ -76,9 +75,9 @@
             </div>
         </div>
     </li>
-    @endif
 
     <!-- Riwayat -->
+    @if(auth()->user()->role == 'admin')
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRiwayat"
             aria-expanded="true" aria-controls="collapseRiwayat">
@@ -93,6 +92,22 @@
             </div>
         </div>
     </li>
+
+    <!-- Pengaturan -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePengaturan"
+            aria-expanded="true" aria-controls="collapsePengaturan">
+            <i class="fas fa-fw fa-cogs"></i>
+            <span>Setting</span>
+        </a>
+        <div id="collapsePengaturan" class="collapse" aria-labelledby="headingPengaturan"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{{ route('user.index') }}">Data User</a>
+            </div>
+        </div>
+    </li>
+    @endif
 
 
     <!-- Divider -->
